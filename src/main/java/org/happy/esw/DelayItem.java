@@ -1,5 +1,6 @@
 package org.happy.esw;
 
+import java.util.Objects;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
@@ -64,5 +65,22 @@ public class DelayItem<T> implements Delayed {
         ", creationTime=" + creationTime +
         ", aliveTime=" + aliveTime +
         '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    DelayItem<?> delayItem = (DelayItem<?>) o;
+    return item.equals(delayItem.item);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(item);
   }
 }

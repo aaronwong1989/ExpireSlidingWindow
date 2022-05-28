@@ -1,5 +1,6 @@
 package org.happy.esw;
 
+import java.security.Key;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,28 @@ class ExpireSlidingWindowTest {
         (key, value) -> log.info("send to MQ : <{},{}> ", key, value)
     );
     esw.setup();
+  }
+
+  @Test
+  void example() throws InterruptedException {
+    String key = "key";
+    // 只会被发送5条，其他5条进入担保机制
+    for (int i = 1; i < 10; i++) {
+      if (esw.put(key + i, i)) {
+        log.info("send message: {},{}", key + i, esw.get(key + i));
+      }
+    }
+    TimeUnit.MILLISECONDS.sleep(1005);
+
+    // 10条都会发送，因为消息处理后移除的窗口
+    for (int i = 10; i < 20; i++) {
+      if (esw.put(key + i, i)) {
+        log.info("send message: {},{}", key + i, esw.get(key + i));
+        // TODO 消息处理
+        esw.remove(key + i);
+      }
+    }
+    TimeUnit.MILLISECONDS.sleep(1005);
   }
 
 
