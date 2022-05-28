@@ -61,12 +61,24 @@ public class ExpireSlidingWindow<K, V> {
 
   private final transient ReentrantLock lock = new ReentrantLock();
 
-  public ExpireSlidingWindow(String name, int windowCapacity, long delayedTime, TimeUnit unit,
+  /**
+   * 构建一个滑动窗口，构建后需要执行一次setup()方法。
+   * <p>
+   * 使用方法详见测试案例。
+   *
+   * @param name                 名称
+   * @param windowCapacity       容量，不会自动扩容
+   * @param aliveTime            元素的存活时长
+   * @param unit                 时间单位
+   * @param expireCallback       过期元素的回调函数
+   * @param rateLimitingCallback 窗口达到阈值时的消息拒绝进入窗口的回调函数
+   */
+  public ExpireSlidingWindow(String name, int windowCapacity, long aliveTime, TimeUnit unit,
       Callback<K, V> expireCallback,
       Callback<K, V> rateLimitingCallback) {
     this.name = name;
     this.windowCapacity = windowCapacity;
-    this.delayedMillis = TimeUnit.MILLISECONDS.convert(delayedTime, unit);
+    this.delayedMillis = TimeUnit.MILLISECONDS.convert(aliveTime, unit);
     cache = new ConcurrentHashMap<K, V>(windowCapacity);
     delayQueue = new DelayQueue<>();
     this.expireCallback = expireCallback;
