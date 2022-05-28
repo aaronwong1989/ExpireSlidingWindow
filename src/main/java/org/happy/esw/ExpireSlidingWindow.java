@@ -91,13 +91,14 @@ public class ExpireSlidingWindow<K, V> {
    *
    * @param key   key not null
    * @param value value not null
+   * @return true 投递成功，可继续进行后续处理逻辑， false 投递失败，放弃后续处理逻辑（采用担保handler处理或其他处理机制）
    */
-  public void put(K key, V value) {
+  public boolean put(K key, V value) {
     if (!this.setup.get()) {
       throw new RuntimeException("使用滑动窗口前，须先执行setup()方法，该方法仅需执行一次!");
     }
     if (key == null || value == null) {
-      return;
+      return false;
     }
     // 活动窗口未满
     if (this.size.get() < this.windowCapacity) {
@@ -119,6 +120,7 @@ public class ExpireSlidingWindow<K, V> {
       } finally {
         this.lock.unlock();
       }
+      return true;
     }
     // 滑动窗口已满，且具备回调函数时，如果添加的是新元素，则执行回调函数，做担保处理
     else if (!this.containsKey(key) && this.rateLimitingCallback != null) {
@@ -129,6 +131,7 @@ public class ExpireSlidingWindow<K, V> {
         log.error("rateLimitingCallback.handle() cause unknown exception", e);
       }
     }
+    return false;
   }
 
   /**
