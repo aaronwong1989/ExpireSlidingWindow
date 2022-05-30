@@ -6,7 +6,7 @@ package org.happy.mq;
  * @author huangzhonghui
  */
 @FunctionalInterface
-public interface MessageSender<V> {
+public interface MessageSender<T> {
 
   /**
    * 发送消息
@@ -14,6 +14,6 @@ public interface MessageSender<V> {
    * @param message 待发送消息
    * @return 消息发送状态
    */
-  int send(V message) throws Exception;
+  int send(T message) throws Exception;
 
 }
