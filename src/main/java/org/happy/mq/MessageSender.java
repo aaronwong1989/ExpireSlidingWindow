@@ -1,4 +1,4 @@
-package mq;
+package org.happy.mq;
 
 /**
  * 消息发送函数

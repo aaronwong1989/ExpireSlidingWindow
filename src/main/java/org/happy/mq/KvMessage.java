@@ -1,4 +1,4 @@
-package mq;
+package org.happy.mq;
 
 public interface KvMessage<K> {
 

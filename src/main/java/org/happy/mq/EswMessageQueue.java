@@ -1,4 +1,4 @@
-package mq;
+package org.happy.mq;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.locks.Lock;
@@ -9,8 +9,8 @@ import org.happy.esw.ExpireSlidingWindow;
 /**
  * 带滑动窗口的消息队列
  *
- * @param <K> 消息的Key
- * @param <V> 消息的Value
+ * @param <K> 消息的Key类型
+ * @param <V> 消息的Value类型
  */
 @Slf4j
 public class EswMessageQueue<K, V extends KvMessage<K>> {

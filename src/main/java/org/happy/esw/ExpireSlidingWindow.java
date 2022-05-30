@@ -26,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
  * @author huangzhonghui
  */
 @Slf4j
-@Getter
 public class ExpireSlidingWindow<K, V> {
 
   /**
