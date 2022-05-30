@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -25,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author huangzhonghui
  */
 @Slf4j
+@Getter
 public class ExpireSlidingWindow<K, V> {
 
   /**
@@ -79,7 +81,7 @@ public class ExpireSlidingWindow<K, V> {
     this.name = name;
     this.windowCapacity = windowCapacity;
     this.delayedMillis = TimeUnit.MILLISECONDS.convert(aliveTime, unit);
-    cache = new ConcurrentHashMap<K, V>(windowCapacity);
+    cache = new ConcurrentHashMap<>(windowCapacity);
     delayQueue = new DelayQueue<>();
     this.expireCallback = expireCallback;
     this.rateLimitingCallback = rateLimitingCallback;
@@ -147,7 +149,7 @@ public class ExpireSlidingWindow<K, V> {
   }
 
   /**
-   * 删除制定Key对应的元素
+   * 删除指定Key对应的元素
    */
   public V remove(K key) {
     this.lock.lock();
