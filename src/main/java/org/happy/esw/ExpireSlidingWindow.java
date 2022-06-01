@@ -202,8 +202,8 @@ public class ExpireSlidingWindow<K, V> {
             log.error("expireCallback.handle() cause unknown exception", e);
           }
         }
-      } catch (Exception e) {
-        log.error("expireCheck() cause unknown exception", e);
+      } catch (Throwable t) {
+        log.error("expireCheck() cause unknown exception", t);
       }
     }
   }
