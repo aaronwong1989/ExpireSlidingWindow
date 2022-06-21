@@ -186,18 +186,19 @@ public class ExpireSlidingWindow<K, V> {
       try {
         DelayItem<K> delayItem = this.delayQueue.take();
         this.lock.lock();
+        V v;
         try {
-          V v = this.cache.remove(delayItem.getItem());
+          v = this.cache.remove(delayItem.getItem());
           if (v != null) {
             this.size.decrementAndGet();
           }
         } finally {
           this.lock.unlock();
         }
-        if (this.expireCallback != null) {
+        if (this.expireCallback != null && v != null) {
           try {
             log.info("滑动窗中元素因过期而被清理，执行expireCallback.handle() for :{}", delayItem.getItem());
-            this.expireCallback.handle(delayItem.getItem(), this.cache.get(delayItem.getItem()));
+            this.expireCallback.handle(delayItem.getItem(), v);
           } catch (Exception e) {
             log.error("expireCallback.handle() cause unknown exception", e);
           }
